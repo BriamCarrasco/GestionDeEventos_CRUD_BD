@@ -36,7 +36,7 @@ public class Mascota {
     private String generoMascota;
 
     @ManyToOne
-    @JoinColumn(name = "id_participante")
+    @JoinColumn(name = "PARTICIPANTE_ID")
     private Participante participante;
 
     public Mascota() {
