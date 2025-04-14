@@ -4,11 +4,12 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.sumativa2.exp2_s5_briam_carrasco.model.Inscripcion;
 import com.sumativa2.exp2_s5_briam_carrasco.respository.InscripcionRepository;
 
-
+@Service
 public class InscripcionServiceImpl implements InscripcionService {
 
     @Autowired
