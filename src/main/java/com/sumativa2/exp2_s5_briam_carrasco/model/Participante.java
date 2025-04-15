@@ -13,6 +13,7 @@ public class Participante {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "ID")
     private Long idParticipante;
 
     @Column(name = "NOMBRE_PARTICIPANTE")
