@@ -36,7 +36,10 @@ public class EventoController {
     EventoDTO dto = new EventoDTO();
     dto.setId(evento.getId());
     dto.setNombre(evento.getNombre());
+    dto.setFecha(evento.getFechaEvento());
     dto.setLugar(evento.getLugarEvento());
+    dto.setDescripcion(evento.getDescripcionEvento());
+
 
     List<ParticipanteDTO> participantes = evento.getInscripciones().stream()
         .map(inscripcion -> {

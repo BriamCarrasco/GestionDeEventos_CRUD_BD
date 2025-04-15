@@ -1,5 +1,7 @@
 package com.sumativa2.exp2_s5_briam_carrasco.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -19,6 +21,7 @@ public class Inscripcion {
     private Long idInscripcion;
 
     @ManyToOne
+    @JsonBackReference
     @JoinColumn(name = "EVENTO_ID")
     private Evento evento;
 

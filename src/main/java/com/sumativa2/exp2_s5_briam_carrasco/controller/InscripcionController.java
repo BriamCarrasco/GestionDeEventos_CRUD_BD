@@ -13,7 +13,10 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.sumativa2.exp2_s5_briam_carrasco.model.Evento;
 import com.sumativa2.exp2_s5_briam_carrasco.model.Inscripcion;
+import com.sumativa2.exp2_s5_briam_carrasco.model.Participante;
 import com.sumativa2.exp2_s5_briam_carrasco.respository.EventoRepository;
 import com.sumativa2.exp2_s5_briam_carrasco.respository.ParticipanteRepository;
 import com.sumativa2.exp2_s5_briam_carrasco.service.InscripcionService;
