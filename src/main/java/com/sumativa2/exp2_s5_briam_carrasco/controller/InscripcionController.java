@@ -1,5 +1,6 @@
 package com.sumativa2.exp2_s5_briam_carrasco.controller;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -36,22 +37,31 @@ public class InscripcionController {
     private ParticipanteRepository participanteRepository;
 
 
-    private Inscripcion convertToEntity(Inscripcion inscripcion) {
-        Inscripcion inscripcionEntity = new Inscripcion();
-        inscripcionEntity.setEvento(eventoRepository.findById(inscripcion.getEvento().getId()).orElse(null));
-        inscripcionEntity.setParticipante(participanteRepository.findById(inscripcion.getParticipante().getIdParticipante()).orElse(null));
-        return inscripcionEntity;
-    }
-
     @PostMapping
-    public ResponseEntity<Inscripcion> createInscripcion(@RequestBody Inscripcion inscripcion) {
-        Inscripcion inscripcionEntity = convertToEntity(inscripcion);
-        if (inscripcionEntity.getEvento() == null || inscripcionEntity.getParticipante() == null) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+    public ResponseEntity<Inscripcion> createInscripcion(@RequestBody Map<String, Long> request) {
+        // Obtiene los IDs desde el cuerpo de la solicitud
+        Long eventoId = request.get("eventoId");
+        Long participanteId = request.get("participanteId");
+    
+        // Busca las entidades en el repositorio
+        Evento evento = eventoRepository.findById(eventoId).orElse(null);
+        Participante participante = participanteRepository.findById(participanteId).orElse(null);
+        
+        if (evento == null || participante == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);  // Retorna error si no se encuentran
         }
+        
+        // Crea la inscripcion con las entidades obtenidas
+        Inscripcion inscripcionEntity = new Inscripcion();
+        inscripcionEntity.setEvento(evento);
+        inscripcionEntity.setParticipante(participante);
+        
+        // Guarda la inscripcion en el repositorio
         Inscripcion createdInscripcion = inscripcionService.createInscripcion(inscripcionEntity);
+        
         return new ResponseEntity<>(createdInscripcion, HttpStatus.CREATED);
     }
+
 
     @GetMapping
     public List<Inscripcion> getallInscripcion() {
@@ -62,21 +72,6 @@ public class InscripcionController {
     public Optional<Inscripcion> getInscripcionById(@PathVariable Long id) {
         return inscripcionService.getInscripcionById(id);
     }
-
-
-
-    /*
-    @PostMapping
-    public ResponseEntity<Inscripcion> createInscripcion(@RequestBody Inscripcion inscripcion) {
-        Inscripcion createdInscripcion = inscripcionService.createInscripcion(inscripcion);
-        return new ResponseEntity<>(createdInscripcion, HttpStatus.CREATED);
-    }
-
-    */
-    /*@PostMapping
-    public Inscripcion createEvento(@RequestBody Inscripcion inscripcion) {
-        return inscripcionService.createInscripcion(inscripcion);
-    }*/
 
     @DeleteMapping("/{id}")
     public void deleteEvento(@PathVariable Long id) {
