@@ -37,11 +37,8 @@ public class MascotaController {
     @Autowired
     private ParticipanteRepository participanteRepository;
 
-    @PostMapping
-    public ResponseEntity<Mascota> createMascota(@RequestBody MascotaDTO mascotaDTO) {
-        Participante participante = participanteRepository.findById(mascotaDTO.getParticipanteId())
-                .orElseThrow(() -> new RuntimeException("Participante no encontrado"));
 
+    private Mascota convertToEntity(MascotaDTO mascotaDTO, Participante participante) {
         Mascota mascota = new Mascota();
         mascota.setNombreMascota(mascotaDTO.getNombreMascota());
         mascota.setEdadMascota(mascotaDTO.getEdadMascota());
@@ -50,7 +47,17 @@ public class MascotaController {
         mascota.setColorMascota(mascotaDTO.getColorMascota());
         mascota.setGeneroMascota(mascotaDTO.getGeneroMascota());
         mascota.setParticipante(participante);
+        return mascota;
+    }      
 
+
+    @PostMapping
+    public ResponseEntity<Mascota> createMascota(@RequestBody MascotaDTO mascotaDTO) {
+        Optional<Participante> participanteOpt = participanteRepository.findById(mascotaDTO.getParticipanteId());
+        if (participanteOpt.isEmpty()) {
+            return ResponseEntity.ok(null);
+        }
+        Mascota mascota = convertToEntity(mascotaDTO, participanteOpt.get());
         Mascota savedMascota = mascotaRepository.save(mascota);
         return new ResponseEntity<>(savedMascota, HttpStatus.CREATED);
     }

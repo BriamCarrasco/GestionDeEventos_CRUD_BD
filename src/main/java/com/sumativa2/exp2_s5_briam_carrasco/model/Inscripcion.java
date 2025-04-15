@@ -15,7 +15,7 @@ public class Inscripcion {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "ID")
+    @Column(name = "ID_EVENTO_PARTICIPANTE")
     private Long idInscripcion;
 
     @ManyToOne
