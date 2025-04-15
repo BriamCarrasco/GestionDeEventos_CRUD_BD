@@ -31,12 +31,6 @@ public class EventoController {
     
     @Autowired
     private EventoService eventoService;
-    /*
-    @GetMapping
-    public List<Evento> getAllEventos() {
-        return eventoService.getAllEventos();
-    }
-    */
 
     private EventoDTO convertToDTO(Evento evento) {
     EventoDTO dto = new EventoDTO();
