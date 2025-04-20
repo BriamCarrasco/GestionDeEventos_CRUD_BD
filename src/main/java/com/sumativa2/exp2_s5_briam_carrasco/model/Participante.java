@@ -28,7 +28,7 @@ public class Participante {
     private String rutParticipante;
 
     @NotNull
-    @Email(message = "El correo no es válido, debe tener el formato correcto")
+    @Email(message = "El correo no es válido, debe tener el formato correcto(nombre@dominio.com)")
     @Column(name = "CORREO_PARTICIPANTE")
     private String correoParticipante;
 
