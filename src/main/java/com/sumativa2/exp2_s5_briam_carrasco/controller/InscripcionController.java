@@ -39,26 +39,17 @@ public class InscripcionController {
 
     @PostMapping
     public ResponseEntity<Inscripcion> createInscripcion(@RequestBody Map<String, Long> request) {
-        // Obtiene los IDs desde el cuerpo de la solicitud
         Long eventoId = request.get("eventoId");
         Long participanteId = request.get("participanteId");
-    
-        // Busca las entidades en el repositorio
         Evento evento = eventoRepository.findById(eventoId).orElse(null);
         Participante participante = participanteRepository.findById(participanteId).orElse(null);
-        
         if (evento == null || participante == null) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);  // Retorna error si no se encuentran
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         }
-        
-        // Crea la inscripcion con las entidades obtenidas
         Inscripcion inscripcionEntity = new Inscripcion();
         inscripcionEntity.setEvento(evento);
         inscripcionEntity.setParticipante(participante);
-        
-        // Guarda la inscripcion en el repositorio
         Inscripcion createdInscripcion = inscripcionService.createInscripcion(inscripcionEntity);
-        
         return new ResponseEntity<>(createdInscripcion, HttpStatus.CREATED);
     }
 
