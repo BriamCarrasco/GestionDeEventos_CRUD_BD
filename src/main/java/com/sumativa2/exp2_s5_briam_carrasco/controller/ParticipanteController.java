@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.sumativa2.exp2_s5_briam_carrasco.model.Participante;
 import com.sumativa2.exp2_s5_briam_carrasco.service.ParticipanteService;
 
+import jakarta.validation.Valid;
+
 @RestController
 @RequestMapping("/participantes")
 @CrossOrigin(origins = "*")
@@ -36,7 +38,7 @@ public class ParticipanteController {
     }
 
     @PostMapping
-    public Participante createParticipante(@RequestBody Participante participante) {
+    public Participante createParticipante(@Valid @RequestBody Participante participante) {
         return participanteService.createParticipante(participante);
     }
 
