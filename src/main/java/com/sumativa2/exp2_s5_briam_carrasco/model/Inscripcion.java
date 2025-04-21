@@ -10,6 +10,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "INSCRIPCION")
@@ -20,11 +21,13 @@ public class Inscripcion {
     @Column(name = "ID_EVENTO_PARTICIPANTE")
     private Long idInscripcion;
 
+    @NotNull
     @ManyToOne
     @JsonBackReference
     @JoinColumn(name = "EVENTO_ID")
     private Evento evento;
 
+    @NotNull
     @ManyToOne
     @JoinColumn(name = "PARTICIPANTE_ID")
     private Participante participante;

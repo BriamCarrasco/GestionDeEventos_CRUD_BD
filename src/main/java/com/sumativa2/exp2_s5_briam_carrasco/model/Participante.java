@@ -8,6 +8,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
 @Entity
 @Table(name = "PARTICIPANTE")
@@ -20,10 +21,12 @@ public class Participante {
 
 
     @NotNull
+    @Size(min = 3, max = 100)
     @Column(name = "NOMBRE_PARTICIPANTE")
     private String nombreParticipante;
 
     @NotNull
+    @Size(min = 9, max = 12)
     @Column(name = "RUT_PARTICIPANTE")
     private String rutParticipante;
 
@@ -33,10 +36,12 @@ public class Participante {
     private String correoParticipante;
 
     @NotNull
+    @Size(min = 9, max = 12)
     @Column(name = "TELEFONO_PARTICIPANTE")
     private String telefonoParticipante;
 
     @NotNull
+    @Size(min = 10, max = 100)
     @Column(name = "DIRECCION_PARTICIPANTE")
     private String direccionParticipante;
 

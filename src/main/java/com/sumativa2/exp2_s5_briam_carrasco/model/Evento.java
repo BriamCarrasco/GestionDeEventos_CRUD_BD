@@ -14,6 +14,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "EVENTO")
@@ -24,18 +25,23 @@ public class Evento {
     @Column(name = "ID")
     private Long id;
 
+    @NotNull
     @Column(name = "NOMBRE_EVENTI")
     private String nombre;
 
+    @NotNull
     @Column(name = "FECHA_EVENTO")
     private LocalDate fechaEvento;
 
+    @NotNull
     @Column(name = "LUGAR_EVENTO")
     private String lugarEvento;
 
+    @NotNull
     @Column(name = "DESCRIPCION_EVENTO")
     private String descripcionEvento;
 
+    @NotNull
     @OneToMany(mappedBy = "evento", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
     private List<Inscripcion> inscripciones = new ArrayList<>();

@@ -8,6 +8,9 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 
 @Entity
 @Table(name = "MASCOTA")
@@ -17,24 +20,33 @@ public class Mascota {
     @Column(name = "ID")
     private Long idMascota;
 
+    @NotNull
+    @Size(min = 3, max = 50)
     @Column(name = "NOMBRE_MASCOTA")
     private String nombreMascota;
 
+    @NotNull
     @Column(name = "EDAD_MASCOTA")
     private String edadMascota;
 
+    @NotNull
     @Column(name = "ESPECIE_MASCOTA")
     private String especieMascota;
 
+    @NotNull
     @Column(name = "RAZA_MASCOTA")
     private String razaMascota;
 
+    @NotNull
     @Column(name = "COLOR_MASCOTA")
     private String colorMascota;
 
+    @NotNull
+    @Pattern(regexp = "macho|hembra", flags = Pattern.Flag.CASE_INSENSITIVE, message = "El género debe ser 'macho' o 'hembra'")
     @Column(name = "GENERO_MASCOTA")
     private String generoMascota;
 
+    @NotNull
     @ManyToOne
     @JoinColumn(name = "PARTICIPANTE_ID")
     private Participante participante;
