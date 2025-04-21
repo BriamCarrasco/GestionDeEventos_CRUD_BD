@@ -26,23 +26,28 @@ public class Mascota {
     private String nombreMascota;
 
     @NotNull
+    @Size(min = 1, max = 3)
     @Column(name = "EDAD_MASCOTA")
     private String edadMascota;
 
+    @Size(min = 4, max = 50)
     @NotNull
     @Column(name = "ESPECIE_MASCOTA")
     private String especieMascota;
 
+    @Size(min = 4, max = 50)
     @NotNull
     @Column(name = "RAZA_MASCOTA")
     private String razaMascota;
 
+    @Size(min = 4, max = 50)
     @NotNull
     @Column(name = "COLOR_MASCOTA")
     private String colorMascota;
 
+    @Size(min = 4, max = 10)
     @NotNull
-    @Pattern(regexp = "macho|hembra", flags = Pattern.Flag.CASE_INSENSITIVE, message = "El género debe ser 'macho' o 'hembra'")
+    @Pattern(regexp = "Macho|Hembra", flags = Pattern.Flag.CASE_INSENSITIVE, message = "El género debe ser 'macho' o 'hembra'")
     @Column(name = "GENERO_MASCOTA")
     private String generoMascota;
 
