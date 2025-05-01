@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
@@ -43,6 +44,7 @@ public class ParticipanteRepositoryTest {
     }
 
     @Test
+    @DisplayName("Test createParticipante")
     public void createParticipanteTest() {
 
         Participante resultado = participanteRepository.save(participante);
@@ -53,7 +55,8 @@ public class ParticipanteRepositoryTest {
     }
 
     @Test
-    public void findByIdTest() {
+    @DisplayName("Test getParticipanteById")
+    public void getParticipanteById() {
         Participante guardado = participanteRepository.save(participante);
         Optional<Participante> encontrado = participanteRepository.findById(guardado.getIdParticipante());
 
