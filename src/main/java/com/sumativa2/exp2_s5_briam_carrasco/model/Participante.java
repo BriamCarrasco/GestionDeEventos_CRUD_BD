@@ -98,5 +98,5 @@ public class Participante extends RepresentationModel<Participante> {
         this.direccionParticipante = direccionParticipante;
     }
 
-    
+
 }
