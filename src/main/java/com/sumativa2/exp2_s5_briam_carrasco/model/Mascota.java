@@ -1,5 +1,7 @@
 package com.sumativa2.exp2_s5_briam_carrasco.model;
 
+import org.springframework.hateoas.RepresentationModel;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -14,7 +16,7 @@ import jakarta.validation.constraints.Size;
 
 @Entity
 @Table(name = "MASCOTA")
-public class Mascota {
+public class Mascota extends RepresentationModel<Mascota> {
     @Id
     @GeneratedValue (strategy = GenerationType.IDENTITY)
     @Column(name = "ID")

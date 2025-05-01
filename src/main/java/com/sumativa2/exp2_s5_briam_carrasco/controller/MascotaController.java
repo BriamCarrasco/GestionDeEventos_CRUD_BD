@@ -2,10 +2,12 @@ package com.sumativa2.exp2_s5_briam_carrasco.controller;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.hateoas.CollectionModel;
+import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,11 +18,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.sumativa2.exp2_s5_briam_carrasco.dto.MascotaDTO;
 import com.sumativa2.exp2_s5_briam_carrasco.model.Mascota;
-import com.sumativa2.exp2_s5_briam_carrasco.model.Participante;
-import com.sumativa2.exp2_s5_briam_carrasco.respository.MascotaRepository;
-import com.sumativa2.exp2_s5_briam_carrasco.respository.ParticipanteRepository;
 import com.sumativa2.exp2_s5_briam_carrasco.service.MascotaService;
 
 @RestController
@@ -31,64 +29,49 @@ public class MascotaController {
     @Autowired
     private MascotaService mascotaService;
 
-    @Autowired
-    private MascotaRepository mascotaRepository;
-
-    @Autowired
-    private ParticipanteRepository participanteRepository;
-
-
-    private Mascota convertToEntity(MascotaDTO mascotaDTO, Participante participante) {
-        Mascota mascota = new Mascota();
-        mascota.setNombreMascota(mascotaDTO.getNombreMascota());
-        mascota.setEdadMascota(mascotaDTO.getEdadMascota());
-        mascota.setEspecieMascota(mascotaDTO.getEspecieMascota());
-        mascota.setRazaMascota(mascotaDTO.getRazaMascota());
-        mascota.setColorMascota(mascotaDTO.getColorMascota());
-        mascota.setGeneroMascota(mascotaDTO.getGeneroMascota());
-        mascota.setParticipante(participante);
-        return mascota;
-    }      
-
-
-    @PostMapping
-    public ResponseEntity<Mascota> createMascota(@RequestBody MascotaDTO mascotaDTO) {
-        Optional<Participante> participanteOpt = participanteRepository.findById(mascotaDTO.getParticipanteId());
-        if (participanteOpt.isEmpty()) {
-            return ResponseEntity.ok(null);
-        }
-        Mascota mascota = convertToEntity(mascotaDTO, participanteOpt.get());
-        Mascota savedMascota = mascotaRepository.save(mascota);
-        return new ResponseEntity<>(savedMascota, HttpStatus.CREATED);
-    }
-
     @GetMapping
-    public List<Mascota> getAllMascotas() {
-        return mascotaService.getAllMascotas();
+    public CollectionModel<EntityModel<Mascota>> getAllMascotas() {
+        List<Mascota> mascotas = mascotaService.getAllMascotas();
+
+        List<EntityModel<Mascota>> mascotaResources = mascotas.stream()
+                .map(mascota -> EntityModel.of(mascota,
+                    WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(this.getClass()).getMascotaById(mascota.getIdMascota())).withSelfRel()))
+                .collect(Collectors.toList());
+
+        WebMvcLinkBuilder linkTo = WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(this.getClass()).getAllMascotas());
+        return CollectionModel.of(mascotaResources, linkTo.withRel("mascotas"));
     }
 
     @GetMapping("/{id}")
-    public Optional<Mascota> getMascotaById(@PathVariable Long id) {
-        return mascotaService.getMascotaById(id);
+    public EntityModel<Mascota> getMascotaById(@PathVariable Long id) {
+        Optional<Mascota> mascota = mascotaService.getMascotaById(id);
+        if (mascota.isPresent()) {
+            return EntityModel.of(mascota.get(),
+                WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(this.getClass()).getMascotaById(id)).withSelfRel(),
+                WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(this.getClass()).getAllMascotas()).withRel("all-mascotas"));
+        } else {
+            throw new RuntimeException("Mascota no encontrada con id: " + id);
+        }
     }
 
-    /* 
     @PostMapping
-    public Mascota createMascota(@RequestBody Mascota mascota) {
-        return mascotaService.createMascota(mascota);
+    public EntityModel<Mascota> createMascota(@RequestBody Mascota mascota) {
+        Mascota createdMascota = mascotaService.createMascota(mascota);
+        return EntityModel.of(createdMascota,
+            WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(this.getClass()).getMascotaById(createdMascota.getIdMascota())).withSelfRel(),
+            WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(this.getClass()).getAllMascotas()).withRel("all-mascotas"));
     }
 
-    */
+    @PutMapping("/{id}")
+    public EntityModel<Mascota> updateMascota(@PathVariable Long id, @RequestBody Mascota mascota) {
+        Mascota updatedMascota = mascotaService.updateMascota(id, mascota);
+        return EntityModel.of(updatedMascota,
+            WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(this.getClass()).getMascotaById(updatedMascota.getIdMascota())).withSelfRel(),
+            WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(this.getClass()).getAllMascotas()).withRel("all-mascotas"));
+    }
 
     @DeleteMapping("/{id}")
     public void deleteMascota(@PathVariable Long id) {
         mascotaService.deleteMascota(id);
     }
-
-    @PutMapping("/{id}")
-    public Mascota updateMascota(@PathVariable Long id, @RequestBody Mascota mascota) {
-        return mascotaService.updateMascota(id, mascota);
-    }
-
-        
 }

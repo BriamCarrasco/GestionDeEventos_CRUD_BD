@@ -1,5 +1,7 @@
 package com.sumativa2.exp2_s5_briam_carrasco.model;
 
+import org.springframework.hateoas.RepresentationModel;
+
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import jakarta.persistence.Column;
@@ -14,7 +16,7 @@ import jakarta.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "INSCRIPCION")
-public class Inscripcion {
+public class Inscripcion extends RepresentationModel<Inscripcion> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

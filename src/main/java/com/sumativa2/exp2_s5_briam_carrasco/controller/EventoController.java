@@ -5,7 +5,9 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
+import org.springframework.hateoas.CollectionModel;
+import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,10 +15,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.sumativa2.exp2_s5_briam_carrasco.dto.EventoDTO;
-import com.sumativa2.exp2_s5_briam_carrasco.dto.ParticipanteDTO;
 import com.sumativa2.exp2_s5_briam_carrasco.model.Evento;
-import com.sumativa2.exp2_s5_briam_carrasco.model.Participante;
 import com.sumativa2.exp2_s5_briam_carrasco.service.EventoService;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -32,49 +31,45 @@ public class EventoController {
     @Autowired
     private EventoService eventoService;
 
-    private EventoDTO convertToDTO(Evento evento) {
-    EventoDTO dto = new EventoDTO();
-    dto.setId(evento.getId());
-    dto.setNombre(evento.getNombre());
-    dto.setFecha(evento.getFechaEvento());
-    dto.setLugar(evento.getLugarEvento());
-    dto.setDescripcion(evento.getDescripcionEvento());
-
-
-    List<ParticipanteDTO> participantes = evento.getInscripciones().stream()
-        .map(inscripcion -> {
-            Participante p = inscripcion.getParticipante();
-            ParticipanteDTO pdto = new ParticipanteDTO();
-            pdto.setId(p.getIdParticipante());
-            pdto.setNombre(p.getNombreParticipante());
-            pdto.setCorreo(p.getCorreoParticipante());
-            return pdto;
-        }).collect(Collectors.toList());
-
-    dto.setParticipantes(participantes);
-
-    return dto;
-}
-
     @GetMapping
-    public ResponseEntity<List<EventoDTO>> getAllEventos() {
+    public CollectionModel<EntityModel<Evento>> getAllEventos() {
         List<Evento> eventos = eventoService.getAllEventos();
 
-        List<EventoDTO> eventoDTOs = eventos.stream()
-            .map(this::convertToDTO)
-            .collect(Collectors.toList());
+        List<EntityModel<Evento>> eventoResources = eventos.stream()
+                .map(evento -> EntityModel.of(evento,
+                    WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(this.getClass()).getEventoById(evento.getId())).withSelfRel()))
+                .collect(Collectors.toList());
 
-        return ResponseEntity.ok(eventoDTOs);
+        WebMvcLinkBuilder linkTo = WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(this.getClass()).getAllEventos());
+        return CollectionModel.of(eventoResources, linkTo.withRel("eventos"));
     }
 
     @GetMapping("/{id}")
-    public Optional<Evento> getEventoById(@PathVariable Long id) {
-        return eventoService.getEventoById(id);
+    public EntityModel<Evento> getEventoById(@PathVariable Long id) {
+        Optional<Evento> evento = eventoService.getEventoById(id);
+        if (evento.isPresent()) {
+            return EntityModel.of(evento.get(),
+                WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(this.getClass()).getEventoById(id)).withSelfRel(),
+                WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(this.getClass()).getAllEventos()).withRel("all-eventos"));
+        } else {
+            throw new RuntimeException("Evento no encontrado con id: " + id);
+        }
     }
 
     @PostMapping
-    public Evento createEvento(@RequestBody Evento evento) {
-        return eventoService.createEvento(evento);
+    public EntityModel<Evento> createEvento(@RequestBody Evento evento) {
+        Evento createdEvento = eventoService.createEvento(evento);
+        return EntityModel.of(createdEvento,
+            WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(this.getClass()).getEventoById(createdEvento.getId())).withSelfRel(),
+            WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(this.getClass()).getAllEventos()).withRel("all-eventos"));
+    }
+
+    @PutMapping("/{id}")
+    public EntityModel<Evento> updateEvento(@PathVariable Long id, @RequestBody Evento evento) {
+        Evento updatedEvento = eventoService.updateEvento(id, evento);
+        return EntityModel.of(updatedEvento,
+            WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(this.getClass()).getEventoById(updatedEvento.getId())).withSelfRel(),
+            WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(this.getClass()).getAllEventos()).withRel("all-eventos"));
     }
 
     @DeleteMapping("/{id}")
@@ -82,10 +77,6 @@ public class EventoController {
         eventoService.deleteEvento(id);
     }
 
-    @PutMapping("/{id}")
-    public Evento updateEvento(@PathVariable Long id, @RequestBody Evento evento) {
-        return eventoService.updateEvento(id, evento);
 
-    }
     
 }

@@ -4,6 +4,8 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.hateoas.RepresentationModel;
+
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.CascadeType;
@@ -18,7 +20,7 @@ import jakarta.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "EVENTO")
-public class Evento {
+public class Evento extends RepresentationModel<Evento> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
