@@ -1,0 +1,13 @@
+version: '1'
+services:
+  gestionEventos:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8081:8081"
+    environment:
+      - spring.datasource.url=jdbc:oracle:thin:@o60z3clzxppals3a_tp?TNS_ADMIN=/app/oracle_wallet/
+      - spring.datasource.username=BD_EVENTOS
+      - spring.datasource.password=BD_ad1012_19
+    restart: always  
