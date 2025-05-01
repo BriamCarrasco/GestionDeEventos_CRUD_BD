@@ -1,6 +1,6 @@
 version: '1'
 services:
-  gestionEventos:
+  gestioneventos:
     build:
       context: .
       dockerfile: Dockerfile
