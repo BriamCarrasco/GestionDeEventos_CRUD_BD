@@ -1,0 +1,7 @@
+com\sumativa2\exp2_s5_briam_carrasco\service\ParticipanteServiceTest.class
+com\sumativa2\exp2_s5_briam_carrasco\controller\ParticipanteControllerTest.class
+com\sumativa2\exp2_s5_briam_carrasco\repository\MascotaRepositoryTest.class
+com\sumativa2\exp2_s5_briam_carrasco\Exp2S5BriamCarrascoApplicationTests.class
+com\sumativa2\exp2_s5_briam_carrasco\service\EventoServiceTest.class
+com\sumativa2\exp2_s5_briam_carrasco\repository\ParticipanteRepositoryTest.class
+com\sumativa2\exp2_s5_briam_carrasco\controller\MascotaControllerTest.class
