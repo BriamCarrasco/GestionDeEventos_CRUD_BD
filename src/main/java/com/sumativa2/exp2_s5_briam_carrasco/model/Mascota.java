@@ -125,5 +125,4 @@ public class Mascota extends RepresentationModel<Mascota> {
         this.participante = participante;
     }
 
-
 }

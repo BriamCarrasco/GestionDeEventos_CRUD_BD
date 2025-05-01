@@ -75,5 +75,5 @@ public class ParticipanteController {
     public void deleteParticipante(@PathVariable Long id) {
         participanteService.deleteParticipante(id);
     }
-    
+
 }

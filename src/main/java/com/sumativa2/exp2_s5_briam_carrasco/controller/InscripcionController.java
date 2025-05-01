@@ -75,6 +75,7 @@ public class InscripcionController {
     public void deleteInscripcion(@PathVariable Long id) {
         inscripcionService.deleteInscripcion(id);
     }
+    
 }
 
     

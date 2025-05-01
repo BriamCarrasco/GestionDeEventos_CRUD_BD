@@ -74,4 +74,5 @@ public class MascotaController {
     public void deleteMascota(@PathVariable Long id) {
         mascotaService.deleteMascota(id);
     }
+    
 }

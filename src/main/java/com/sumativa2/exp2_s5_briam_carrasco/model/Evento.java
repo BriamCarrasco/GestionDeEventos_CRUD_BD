@@ -100,5 +100,4 @@ public class Evento extends RepresentationModel<Evento> {
         this.inscripciones = inscripciones;
     }
     
-    
 }

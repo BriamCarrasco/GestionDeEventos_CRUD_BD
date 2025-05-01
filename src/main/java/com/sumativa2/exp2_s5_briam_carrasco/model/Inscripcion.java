@@ -60,8 +60,5 @@ public class Inscripcion extends RepresentationModel<Inscripcion> {
     public void setParticipante(Participante participante) {
         this.participante = participante;
     }
-
-
-    
     
 }
